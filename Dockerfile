@@ -10,6 +10,9 @@ COPY requirements.txt .
 # Устанавливаем зависимости
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Установите pynput отдельно
+RUN pip install --no-cache-dir pynput
+
 # Копируем все остальные файлы в контейнер
 COPY . .
 
