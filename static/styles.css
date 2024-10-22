@@ -1,0 +1,72 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-image: url('/static/loginback.jpg'); /* Путь к фону */
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+}
+
+.icon {
+    position: absolute;
+    top: 20px;
+    left: 10px;
+    width: 210px;
+    height: 80px;
+    object-fit: contain;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100%;
+}
+
+.login-box {
+    background: #ffa500; /* Цвет фона формы */
+    padding: 35px;
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.button {
+    background: #ffffff; /* Цвет кнопки */
+    border: none;
+    cursor: pointer;
+    margin-top: 10px; /* Отступ сверху */
+    padding: 10px; /* Отступ внутри кнопки */
+}
+
+.cancel-button {
+    background: #ff5c5c; /* Цвет кнопки Отмена */
+    color: white;
+    margin-top: 10px; /* Отступ для кнопки Отмена */
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+}
+
+.label {
+    font-size: 14px; /* Размер шрифта для меток */
+    margin-bottom: 10px; /* Отступ под меткой */
+    text-align: center; /* Выравнивание по центру */
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-between; /* Распределение кнопок */
+    width: 100%; /* Полная ширина для контейнера кнопок */
+}
+
+.error-msg {
+    color: #E9102A; /* Цвет сообщения об ошибке */
+    font-size: 12px; /* Размер шрифта для сообщения об ошибке */
+    text-align: center; /* Выравнивание по центру */
+}

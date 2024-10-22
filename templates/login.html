@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Pragma" content="no-cache">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        function onLogin() {
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            if (!username || !password) {
+                document.getElementById("error").textContent = "Username and Password required";
+                return;
+            }
+
+            // Отправка данных на сервер
+            const formData = new FormData();
+            formData.append("username", username);
+            formData.append("password", password);
+
+            fetch("/", {
+                method: "POST",
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                if (data.message) {
+                    document.getElementById("error").textContent = data.message;
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+        }
+    </script>
+</head>
+<body>
+    <table width="100%" height="100%">
+        <tr>
+            <td align="center">
+                <img src="../../skin/logo.png" width="200" height="72">
+                <div id="error" class="error-msg"></div>
+                <form onsubmit="event.preventDefault(); onLogin();">
+                    <input id="username" type="text" name="username" placeholder="Username" required>
+                    <input id="password" type="password" name="password" placeholder="Password" required>
+                    <div class="button-container">
+                        <input type="submit" class="button" value="Login">
+                        <input type="button" class="cancel-button" value="Cancel" onclick="window.location.reload();">
+                    </div>
+                </form>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

